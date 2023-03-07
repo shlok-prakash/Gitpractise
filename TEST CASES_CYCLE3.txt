@@ -1,0 +1,590 @@
+===================================================================================
+|                                CYCLE-3                                          |
+===================================================================================
+318	CSTL-2635	Organization Bank Account_Ensure Query Bank Account	
+@TC_FINLSO_OrganizationBankAccountQueryBankAccount!
+Scenario: Organization Bank Account_Ensure Query Bank Account
+  Given I login to Fintech as "sp" operator
+  When I search for "Organization" with below details
+  | TableId            | TableValues            | SearchBy                      | SearchValue            | Status        |
+  | Table.Organization | ShortCode.NewShortCode | Label.Organization Short Code | ShortCode.NewShortCode | Status.Active |
+  Then I click on "GenericLocators.BankAccountOrganization"
+  Then I select the "bankHeadOffice" click on the "Standard Lesotho Bank"
+  Then I click on "Search" button in cite
+  Then I check table "Table.BankAccountList" with multiple values as "AccountName" and click on "Detail" of "Operation" column
+  Then I click on "GenericLocators.Closebutton"
+  Then I report "Organization Bank Account Ensure Query Bank Account"
+  Then I logout the "sp" portal and close the browser
+--------------------------------------------------------------------------------------------------------------------------------------
+317	CSTL-2636	Organization Bank Account_ Ensure Set Default Bank Account	
+@TC_FINLSO_OrganizationBankAccountSetDefaultBankAccount!
+Scenario:Organization Bank Account_ Ensure Set Default Bank Account
+  Given I login to Fintech as "sp" operator
+  When I search for "Organization" with below details
+  | TableId            | TableValues            | SearchBy                      | SearchValue            | Status        |
+  | Table.Organization | ShortCode.NewShortCode | Label.Organization Short Code | ShortCode.NewShortCode | Status.Active |
+  Then I click on "GenericLocators.BankAccountOrganization"
+  Then I select the "bankHeadOffice" click on the "Standard Lesotho Bank"
+  Then I click on "Search" button in cite
+  Then I check table "Table.BankAccountList" with multiple values as "AccountName" and click on "Set Default" of "Operation" column
+  Then I click on " Submit " button in cite
+  When static text "Success to set default account." is visible
+  Then I report "Organization Bank Account Set to Default"
+  Then I logout the "sp" portal and close the browser
+----------------------------------------------------------------------------------------------------------------------------------------
+316	CSTL-2637	Organization Bank Account_Ensure Delete Bank Account		
+@TC_FINLSO_OrganizationBankAccountDeleteBankAccount!
+Scenario:Organization Bank Account_Ensure Delete Bank Account
+  Given I login to Fintech as "sp" operator
+  Given I generate name "AccountName" with value "TEST_RAND_4"
+  Given I generate name "AccountNumber" with value "RAND_14"
+  When I search for "Organization" with below details
+  | TableId            | TableValues            | SearchBy                      | SearchValue            | Status        |
+  | Table.Organization | ShortCode.NewShortCode | Label.Organization Short Code | ShortCode.NewShortCode | Status.Active |
+  Then I click on "GenericLocators.BankAccountOrganization"
+  Then I click on "Add" button in cite
+  #Creating a new bank account to delete for testing purpose
+  Then I click on "GenericLocators.BankHODropdown"
+  Then I click on "GenericLocators.StandardLesothoBankDropdown"
+  Then I select drop down "GenericLocators.BankDropDown" with the "DropDown.Bank"
+  Then I click on "GenericLocators.AssetType"
+  Then I click on "GenericLocators.DepositDropdown"
+  Then I select drop down "GenericLocators.Currency" with the "DropDown.LSL"
+  Then I enter text for "GenericLocators.AccountName" with value "AccountName"
+  Then I enter text in "Label.AccountNumber" with value "AccountNumber"
+  Then I click on "Submit" button in cite
+  #Removing the newly created bank account for testing purpose
+  Then I check table "Table.BankAccountList" with multiple values as "AccountName" and click on "Remove" of "Operation" column
+  Then I enter text area "Remark" with value "Reason Description" in the popup dialog window
+  Then I click on "Submit" button in cite
+  When static text "Success to delete." is visible
+  Then I report "SP operator can delete Organization Bank Account via Web"
+  Then I logout the "sp" portal and close the browser
+
+
+=================================================================================================================================================
+
+402	CSTL-5146	Query Account list in My Organization	
+@TC_FINLSO_QueryAccountlistinMyOrganization
+Scenario:Query Account list in My Organization
+  Given I login to Fintech as "org" operator
+  Then I click on "Identity Center" on button in top menu
+  Then I click on left child menu "My Organization " in org of the "Identity Center" Page
+  Then I wait "5"
+  Then I scroll "GenericLocators.ExportButton" to view using "false" parameter
+  Then I wait "5"
+  Then I report "The My Organization Account list displays normal."
+  Then I click on "Home" on button in top menu
+  Then I logout the "org" portal and close the browser
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+348	CSTL-3099	Till Creation_Exception_Till MSISDN is out of Range
+@TC_FINLSO_TillCreation_Exception_TillMSISDNisoutofRange
+Scenario: Till Creation_Exception_Till MSISDN is out of Range
+  Given I login to Fintech as "org" operator
+  Given I generate name "MSISDNOutOfRange" with value "8618799999999_RAND_6"
+  Then I click on "Identity Center" on button in top menu
+  Then I click on left child menu "Till " in org of the "Identity Center" Page
+  Then I click on "GenericLocators.CreateTillOrg"
+  Then I Switch tab
+  Then I enter text in "Label.MSISDN" with value "MSISDNOutOfRange"
+  Then I enter text in "Label.Organization Short Code" with value ""
+  When static text "Must be between 1 and 18 characters" is visible
+  Then I report "The MSISDN is out of msisdn range"
+  Then I wait "8"
+  Then I switch to previousTab
+  Then I click on "Home" on button in top menu
+  Then I logout the "org" portal and close the browser
+
+
+=====================================================================================================================================================
+
+550	CSTL-3018	Exception_The Available Till Num Used Up When Create Till
+@TC_FINLSO_ExceptionTheAvailableTillNumUsedUpWhenCreateTill!
+Scenario: Exception_The Available Till Num Used Up When Create Till
+  Given I login to Fintech as "sp" operator
+  Given I generate name "MSISDN" with value "2665000_RAND_4"
+  Then I click on left child menu "Identity" in the "Home" Page
+  Then I click on left child menu "Till" in the "Home" Page
+  Then I click on "GenericLocators.CreateButton"
+  Then I enter text in "Label.Organization Short Code" with value "ShortCode.NewShortCode"
+  Then I scroll "GenericLocators.TillAutogeneratecode" to view using "false" parameter
+  Then I enter text in "Label.MSISDN" with value "MSISDN"
+  Then I enter text for "GenericLocators.CreateTillNo" with value "Till.MpatOrgOne.UsedTill"
+  Then I select drop down "Language" with option "DropDown.English"
+  Then I wait "3"
+  When static text "till number has been used" is visible
+  Then I report "The Exception can be seen when we enter already used till number"
+  Then I logout the "sp" portal and close the browser
+"UsedTill": "10196"
+
+
+===========================================================================================================================================
+
+
+181    CSTL-2718    SP Operator Close Till via Web_Till Status Frozen
+@TC_FINLSO_SSPOperatorCloseTillviaWeb_TillStatusFrozen!
+#Pending - need a active till number to work with this test case!
+Scenario:SP Operator Close Till via Web_Till Status Frozen
+  Given I login to Fintech as "sp" operator
+  #Prerequisite - need a frozen till
+  When I search for "Till" with below details
+  | TableId    | TableValues                 | Query Condition                       | SearchBy          | Organization Short Code | SearchValue                 | Status        |
+  | Table.Till | Till.MpatOrgOne.TillNumber8 | Till Number + Organization Short Code | Label.Till Number | ShortCode.NewShortCode  | Till.MpatOrgOne.TillNumber8 | Status.Active |
+  Then I edit Identity Status in "Till" with value "Frozen"
+  Then I wait "5"
+  Then I click on left child menu "Till" in the "Home" Page
+  Then I select drop down "Query Condition" with option "DropDown.TillqueryCondition"
+  Then I enter text in "Label.Till Number" with value "Till.MpatOrgOne.TillNumber8"
+  Then I click on "Search" button in cite
+  Then I check table "Table.Till" with multiple values as "Till.MpatOrgOne.TillNumber8" and click on "Close" of "Operation" column
+  Then I enter text area "Remark" with value "Testing" in the popup dialog window
+  Then I click on "Confirm" button in cite
+  Then I click on left child menu "Audit Log" in the "Home" Page
+  Then I click on left child menu "Identity Audit Log" in the "Home" Page
+  Then I select drop down "Event" with option "DropDown.EventClosetill"
+  Then I click on "Search" button in cite
+  Then I check table "Table.IdentityAuditlog" with multiple values as "SP Operator|Close Till" and click on "Detail" of "Operation" column
+  Then I click on "GenericLocators.CloseViewDetails"
+  Then I report "SP operator closes till when the till status is frozen"
+  Then I logout the "sp" portal and close the browser
+--------------------------------------------------------------------------------------------------------------------------------------------------
+182    CSTL-2712    SP Operator Close Till via Web_ Till Status Active
+@TC_FINLSO_SPOperatorCloseTillviaWebTillStatusActive!
+#Need a active till number to work with this test case
+Scenario:SP Operator Close Till via Web_ Till Status Active
+  Given I login to Fintech as "sp" operator
+  Then I click on left child menu "Identity" in the "Home" Page
+  Then I click on left child menu "Till" in the "Home" Page
+  Then I select drop down "Query Condition" with option "DropDown.TillqueryCondition"
+  Then I enter text in "Label.Till Number" with value "Till.MpatOrgOne.TillNumber8"
+  Then I click on "Search" button in cite
+  Then I check table "Table.Till" with multiple values as "Till.MpatOrgOne.TillNumber8" and click on "Close" of "Operation" column
+  Then I enter text area "Remark" with value "Testing" in the popup dialog window
+  Then I click on "Confirm" button in cite
+  Then I click on left child menu "Audit Log" in the "Home" Page
+  Then I click on left child menu "Audit Log" in the "Home" Page
+  Then I click on left child menu "Identity Audit Log" in the "Home" Page
+  Then I select drop down "Event" with option "DropDown.EventClosetill"
+  Then I click on "Search" button in cite
+  Then I check table "Table.IdentityAuditlog" with multiple values as "SP Operator|Close Till" and click on "Detail" of "Operation" column
+  Then I click on "GenericLocators.CloseViewDetails"
+  Then I report "SP operator close Till via Web when till status is active"
+  Then I logout the "sp" portal and close the browser
+
+=====================================================================================================================================================
+DATE:13/02/2023
+
+219	CSTL-3861	Config Portal and SP Portal Logout at the Same Time via Click Config Portal Logout Button
+@TC_FINLSO_ConfigPortalandSPPortalLogoutattheSameTimeviaClickConfigPortalLogoutButton
+Scenario:Config Portal and SP Portal Logout at the Same Time via Click Config Portal Logout Button
+  Given I login to Fintech as "sp" operator
+  Then I click on "GenericLocators.Configuration"
+  Then I click on left child menu "Config Portal" in the "Home" Page
+  Then I click on "GenericLocators.OKButton"
+  Then I Switch tab
+  Then I wait "10"
+  Then I logout the "config" portal and close the browser
+  Then I switch to previousTab
+  Then I click on left child menu "Configuration" in the "Home" Page
+  Then I click on left child menu "Identity" in the "Home" Page
+  Then I click on left child menu "Till" in the "Home" Page
+  Then I refresh the page
+  Then I wait "20"
+  Then I report "Sp portal and config portal logout when when we click config portal logout button"
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+218	CSTL-3863	Config Portal and SP Portal logout at the same time via click SP Portal Logout Button
+@TC_FINLSO_ConfigPortalandSPPortallogoutatthesametimeviaclickSPPortalLogoutButton
+Scenario:Config Portal and SP Portal logout at the same time when we click sp portal logout Button
+  Given I login to Fintech as "sp" operator
+  Then I click on "GenericLocators.Configuration"
+  Then I click on left child menu "Config Portal" in the "Home" Page
+  Then I click on "GenericLocators.OKButton"
+  Then I Switch tab
+  Then I wait "10"
+  Then I switch to previousTab
+  Then I logout the "sp" portal and close the browser
+  Then I Switch tab
+  When I click on top menu "My Functions" and select sub menu "Operation Support"
+  Then I wait "10"
+  Then I report "Sp portal and config portal logout when when we click sp portal logout button"
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+CSTL-3130	Change Till Status_Exception_Till in Pending Active Status
+@TC_FINLSO_ChangeTillStatus_Exception_TillinPendingActiveStatus
+Scenario: Change Till Status_Exception_Till in Pending Active Status
+  Given I login to Fintech as "org" operator
+  Then I click on "Identity Center" on button in top menu
+  Then I click on "GenericLocators.TillLeftchild"
+  Then I select drop down "Query Condition" with option "DropDown.TillqueryCondition"
+  Then I enter text in "Label.Till Number" with value "Till.MpatOrgOne.TillNumber"
+  Then I click on "Search" button in cite
+  Then I check table "Table.OrgTill" with multiple values as "Till.MpatOrgOne.TillNumber" and click on "Detail" of "Operation" column
+  Then I Switch tab
+  Then I wait "10"
+  Then I report "There is no Edit button against Identity status when status is Pending Active"
+  Then I switch to previousTab
+  Then I click on "Home" on button in top menu
+  Then I logout the "org" portal and close the browser
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+364	CSTL-3128	Change Till Status_Change Till from Frozen to Active
+@TC_FINLSO_ChangeTillStatus_ChangeTillfromFrozentoActive
+Scenario: Change Till Status_Change Till from Frozen to Active
+  Given I login to Fintech as "org" operator
+  Then I click on "Identity Center" on button in top menu
+  Then I click on left child menu "Till " in org of the "Identity Center" Page
+  Then I select drop down "Query Condition" with option "DropDown.TillqueryCondition"
+  Then I enter text in "Label.Till Number" with value "Till.MpatOrgOne.TillNumber9"
+  Then I click on "Search" button in cite
+  Then I edit Identity Status of Till in Org Portal with value "Active"
+  When static text "Status edited successfully" is visible
+  Then I check table "Table.OrgTill" with multiple values as "Till.MpatOrgOne.TillNumber9" and click on "Detail" of "Operation" column
+  Then I Switch tab
+  Then I wait "6"
+  Then I click on the "Audit Log" tab
+  Then I select drop down "Category" with option "Identity Management"
+  Then I select drop down "Event Group" with option "DropDown.Till"
+  Then I select drop down "GenericLocators.TillEvent" with the "DropDown.Change Till Status"
+  Then I click on "Search" button in cite
+  Then I check table "Table.OrgAuditLog" with multiple values as "GenericLocators.TillEvent|DropDown.Change Till Status" and click on "Detail" of "Operation" column
+  Then I wait "6"
+  Then I switch to previousTab
+  Then I click on "Home" on button in top menu
+  Then I logout the "org" portal and close the browser
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+365	CSTL-3125	Change Till Status_Change Till from Active to Frozen
+@TC_FINLSO_ChangeTillStatus_ChangeTillfromActivetoFrozen
+Scenario: Change Till Status_Change Till from Active to Frozen
+  Given I login to Fintech as "org" operator
+  Then I click on "Identity Center" on button in top menu
+  Then I click on left child menu "Till " in org of the "Identity Center" Page
+  Then I select drop down "Query Condition" with option "DropDown.TillqueryCondition"
+  Then I enter text in "Label.Till Number" with value "Till.MpatOrgOne.TillNumber9"
+  Then I click on "Search" button in cite
+  Then I edit Identity Status of Till in Org Portal with value "Frozen"
+  When static text "Status edited successfully" is visible
+  Then I check table "Table.OrgTill" with multiple values as "Till.MpatOrgOne.TillNumber9" and click on "Detail" of "Operation" column
+  Then I Switch tab
+  Then I wait "6"
+  Then I click on the "Audit Log" tab
+  Then I select drop down "Category" with option "Identity Management"
+  Then I select drop down "Event Group" with option "DropDown.Till"
+  Then I select drop down "GenericLocators.TillEvent" with the "DropDown.Change Till Status"
+  Then I click on "Search" button in cite
+  Then I check table "Table.OrgAuditLog" with multiple values as "GenericLocators.TillEvent|DropDown.Change Till Status" and click on "Detail" of "Operation" column
+  Then I wait "6"
+  Then I switch to previousTab
+  Then I click on "Home" on button in top menu
+  Then I logout the "org" portal and close the browser
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+366	CSTL-3123	Change Till Status_Exception_Change Till from close to Active Status
+@TC_FINLSO_ChangeTillStatus_Exception_ChangeTillfromclosetoActiveStatus
+Scenario: Change Till Status_Exception_Change Till from close to Active Status
+  Given I login to Fintech as "org" operator
+  Then I click on "Identity Center" on button in top menu
+  Then I click on left child menu "Till " in org of the "Identity Center" Page
+  Then I select drop down "Query Condition" with option "DropDown.MSISDN"
+  Then I enter text in "Label.MSISDN" with value "Till.MpatOrgOne.ClosedMSISDN"
+  Then I click on " Search " button in cite
+  Then I click on " Search " button in cite
+  Then I check table "Table.OrgTill" with multiple values as "Till.MpatOrgOne.ClosedTill" and click on "Detail" of "Operation" column
+  Then I Switch tab
+  Then I change Language with value "Southern Sotho" and Remark as "Test"
+  Then I click on "GenericLocators.ConfirmButton"
+  Then I report "There is no Edit button against Identity status"
+  Then I switch to previousTab
+  Then I click on "Home" on button in top menu
+  Then I logout the "org" portal and close the browser
+
+=================================================================================================================================================
+DATE:15/02/2023
+
+221	CSTL-3858	Config Portal Logout via Click Logout Button
+@TC_FINLSO_ConfigPortalLogoutviaClickLogoutButton
+Scenario:Config Portal Logout via Click Logout Button
+  Given I login to Fintech as "sp" operator
+  Then I click on "GenericLocators.Configuration"
+  Then I click on left child menu "Config Portal" in the "Home" Page
+  Then I click on "GenericLocators.OKButton"
+  Then I Switch tab
+  Then I wait "10"
+  Then I logout the "config" portal and close the browser
+  Then I report "Config portal successful, The SP portal login page is displayed."
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+367	CSTL-3142	Change Till language_Exception_Till status is Close change Till Language via Web
+@TC_FINLSO_ChangeTilllanguage_Exception_TillstatusisClosechangeTillLanguageviaWeb
+Scenario: Change Till language_Exception_Till status is Close change Till Language via Web
+  Given I login to Fintech as "org" operator
+  Then I click on "Identity Center" on button in top menu
+  Then I click on left child menu "Till " in org of the "Identity Center" Page
+  Then I select drop down "Query Condition" with option "DropDown.MSISDN"
+  Then I enter text in "Label.MSISDN" with value "Till.MpatOrgOne.ClosedMSISDN"
+  Then I click on " Search " button in cite
+  Then I click on " Search " button in cite
+  Then I check table "Table.OrgTill" with multiple values as "Till.MpatOrgOne.ClosedTill" and click on "Detail" of "Operation" column
+  Then I Switch tab
+  Then I change Language with value "Southern Sotho" and Remark as "Test"
+  Then I click on "GenericLocators.ConfirmButton"
+  Then I report "We get an exception while editing the language of a close till"
+  Then I switch to previousTab
+  Then I click on "Home" on button in top menu
+  Then I logout the "org" portal and close the browser
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+368     CSTL-3141	Change Till language_Till status is Frozen change Till Language via Web
+@TC_FINLSO_ChangeTilllanguage_TillstatusisFrozenchangeTillLanguageviaWeb
+Scenario: Change Till language_Till status is Frozen change Till Language via Web
+  Given I login to Fintech as "org" operator
+  Then I click on "Identity Center" on button in top menu
+  Then I click on left child menu "Till " in org of the "Identity Center" Page
+  Then I select drop down "Query Condition" with option "DropDown.MSISDN"
+  Then I enter text in "Label.MSISDN" with value "Till.MpatOrgOne.MSISDNNo9"
+  Then I click on " Search " button in cite
+  Then I click on " Search " button in cite
+  Then I check table "Table.OrgTill" with multiple values as "Till.MpatOrgOne.MSISDNNo9" and click on "Detail" of "Operation" column
+  Then I Switch tab
+  Then I change Language with value "Southern Sotho" and Remark as "Test"
+  When static text "Language edited successfully" is visible
+  Then I click on the "Audit Log" tab
+  Then I select drop down "Category" with option "Identity Management"
+  Then I select drop down "GenericLocators.TillEvent" with the "DropDown.Change Till Status"
+  Then I click on "Search" button in cite
+  Then I check table "Table.OrgAuditLog" with multiple values as "Change Till Language" and click on "Detail" of "Operation" column
+  Then I wait "6"
+  Then I close the dialogue window
+  Then I report "Language change is successfull when till is in frozen state"
+  Then I switch to previousTab
+  Then I click on "Home" on button in top menu
+  Then I logout the "org" portal and close the browser
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+369	CSTL-3140	Change Till language_Till status is Pending Active change Till Language via Web	
+@TC_FINLSO_ChangeTilllanguage_TillstatusisPendingActivechangeTillLanguageviaWeb
+Scenario: Change Till language_Till status is Pending Active change Till Language via Web
+  Given I login to Fintech as "org" operator
+  Then I click on "Identity Center" on button in top menu
+  Then I click on left child menu "Till " in org of the "Identity Center" Page
+  Then I select drop down "Query Condition" with option "DropDown.MSISDN"
+  Then I enter text in "Label.MSISDN" with value "Till.MpatOrgOne.MSisdnNoPending"
+  Then I click on " Search " button in cite
+  Then I click on " Search " button in cite
+  Then I check table "Table.OrgTill" with multiple values as "Till.MpatOrgOne.MSisdnNoPending" and click on "Detail" of "Operation" column
+  Then I Switch tab
+  Then I change Language with value "Southern Sotho" and Remark as "Test"
+  When static text "Language edited successfully" is visible
+  Then I click on the "Audit Log" tab
+  Then I select drop down "Category" with option "Identity Management"
+  Then I click on "Search" button in cite
+  Then I check table "Table.OrgAuditLog" with multiple values as "Change Till Language" and click on "Detail" of "Operation" column
+  Then I wait "6"
+  Then I close the dialogue window
+  Then I report "Language change is successfull when till is in Pending Active state"
+  Then I switch to previousTab
+  Then I click on "Home" on button in top menu
+  Then I logout the "org" portal and close the browser
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+370	CSTL-3139	Change Till language_(PASS)Till status is Active change Till Language via Web
+@TC_FINLSO_ChangeTilllanguage_TillstatusisActivechangeTillLanguageviaWeb
+Scenario: Change Till language_(PASS)Till status is Active change Till Language via Web
+  Given I login to Fintech as "org" operator
+  Then I click on "Identity Center" on button in top menu
+  Then I click on left child menu "Till " in org of the "Identity Center" Page
+  Then I select drop down "Query Condition" with option "DropDown.MSISDN"
+  Then I enter text in "Label.MSISDN" with value "Till.MpatOrgOne.MsisdnNo7"
+  Then I click on " Search " button in cite
+  Then I click on " Search " button in cite
+  Then I check table "Table.OrgTill" with multiple values as "Till.MpatOrgOne.MsisdnNo7" and click on "Detail" of "Operation" column
+  Then I Switch tab
+  Then I change Language with value "Southern Sotho" and Remark as "Test"
+  When static text "Language edited successfully" is visible
+  Then I click on the "Audit Log" tab
+  Then I select drop down "Category" with option "Identity Management"
+  Then I click on "Search" button in cite
+  Then I check table "Table.OrgAuditLog" with multiple values as "Change Till Language" and click on "Detail" of "Operation" column
+  Then I wait "6"
+  Then I close the dialogue window
+  Then I report "Language change is successfull when till is in Active state"
+  Then I switch to previousTab
+  Then I click on "Home" on button in top menu
+  Then I logout the "org" portal and close the browser
+
+==============================================================================================================================================================
+Date:16/02/2023
+
+352	CSTL-3092	Till Creation_Exception_Till Number Already Used By Another Till(Failed)
+@TC_FINLSO_TillCreation_Exception_TillNumberAlreadyUsedByAnotherTill
+#Pending: Failed, Since the static text is not visible.
+Scenario:Till Creation_Exception_Till Number Already Used By Another Till
+  Given I login to Fintech as "org" operator
+  Then I click on "Identity Center" on button in top menu
+  Then I click on left child menu "Till " in org of the "Identity Center" Page
+  Then I click on "Create" button in cite
+  Then I Switch tab
+  Then I enter text in "Label.Till Number" with value "Till.MpatOrgOne.TillNumber7"
+  Then I enter text in "Label.Organization Short Code" with value ""
+  When static text "till number has been used" is visible
+  Then I report "The static text is visible that the till number is already been used "
+  Then I wait "8"
+  Then I switch to previousTab
+  Then I click on "Home" on button in top menu
+  Then I logout the "org" portal and close the browser
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+357	CSTL-3120	Till Close_Exception_Till status is Pending Active colse the Till
+@TC_FINLSO_TillClose_Exception_TillstatusisPendingActivecolsetheTill
+Scenario: Till Close_Exception_Till status is Pending Active colse the Till in Org Portal
+  Given I login to Fintech as "org" operator
+  Then I click on "Identity Center" on button in top menu
+  Then I click on left child menu "Till " in org of the "Identity Center" Page
+  Then I select drop down "Query Condition" with option "DropDown.MSISDN"
+  Then I enter text in "Label.MSISDN" with value "Till.MpatOrgOne.MSisdnInPending"
+  Then I click on " Search " button in cite
+  Then I click on " Search " button in cite
+  Then I report "There is no option for closing the till when its in pending state"
+  Then I click on "Home" on button in top menu
+  Then I logout the "org" portal and close the browser
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+358	CSTL-3117	Till Close_Till status is Frozen colse the Till	
+
+@TC_FINLSO_TillClose_TillstatusisFrozencolsetheTill
+#need An frozen till to run this test case.
+Scenario: Till Close_Till status is Frozen colse the Till	In org Portal
+  Given I login to Fintech as "org" operator
+  Then I click on "Identity Center" on button in top menu
+  Then I click on left child menu "Till " in org of the "Identity Center" Page
+  Then I select drop down "Query Condition" with option "DropDown.TillqueryCondition"
+  Then I enter text in "Label.Till Number" with value "Till.MpatOrgOne.ClosedTill"
+  Then I click on "Search" button in cite
+  Then I check table "Table.OrgTill" with multiple values as "Till.MpatOrgOne.ClosedTill" and click on "Close" of "Operation" column
+  Then I enter text area "Remark" with value "Testing" in the popup dialog window
+  Then I click on "Confirm" button in cite
+  When static text "TIll close successfully" is visible
+  Then I check table "Table.OrgTill" with multiple values as "Till.MpatOrgOne.ClosedTill" and click on "Detail" of "Operation" column
+  Then I Switch tab
+  Then I wait "6"
+  Then I click on the "Audit Log" tab
+  Then I select drop down "Category" with option "Identity Management"
+  Then I select drop down "Event Group" with option "DropDown.Till"
+  Then I select drop down "GenericLocators.TillEvent" with the "DropDown.EventClosetill"
+  Then I click on "Search" button in cite
+  Then I check table "Table.OrgAuditLog" with multiple values as "DropDown.EventClosetill" and click on "Detail" of "Operation" column
+  Then I click on "GenericLocators.Closebutton"
+  Then I wait "6"
+  Then I switch to previousTab
+  Then I click on "Home" on button in top menu
+  Then I logout the "org" portal and close the browser
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+359	CSTL-3115	Till Close_Till status is Active colse the Till
+
+@TC_FINLSO_TillClose_TillstatusisActivecolsetheTill
+#need An Active till to run this test case.
+Scenario: Till Close_Till status is Active colse the Till	In org Portal
+  Given I login to Fintech as "org" operator
+  Then I click on "Identity Center" on button in top menu
+  Then I click on left child menu "Till " in org of the "Identity Center" Page
+  Then I select drop down "Query Condition" with option "DropDown.TillqueryCondition"
+  Then I enter text in "Label.Till Number" with value "Till.MpatOrgOne.ClosedTill"
+  Then I click on "Search" button in cite
+  Then I check table "Table.OrgTill" with multiple values as "Till.MpatOrgOne.ClosedTill" and click on "Close" of "Operation" column
+  Then I enter text area "Remark" with value "Testing" in the popup dialog window
+  Then I click on "Confirm" button in cite
+  When static text "TIll close successfully" is visible
+  Then I check table "Table.OrgTill" with multiple values as "Till.MpatOrgOne.ClosedTill" and click on "Detail" of "Operation" column
+  Then I Switch tab
+  Then I wait "6"
+  Then I click on the "Audit Log" tab
+  Then I select drop down "Category" with option "Identity Management"
+  Then I select drop down "Event Group" with option "DropDown.Till"
+  Then I select drop down "GenericLocators.TillEvent" with the "DropDown.EventClosetill"
+  Then I click on "Search" button in cite
+  Then I check table "Table.OrgAuditLog" with multiple values as "DropDown.EventClosetill" and click on "Detail" of "Operation" column
+  Then I click on "GenericLocators.Closebutton"
+  Then I wait "6"
+  Then I switch to previousTab
+  Then I click on "Home" on button in top menu
+  Then I logout the "org" portal and close the browser
+
+==================================================================================================================================================
+Date:20/02/2023
+
+360    CSTL-3133    Change Till Service_Exception_Till Status Invalid
+@TC_FINLSO_ChangeTillService_Exception_TillStatusInvalid
+Scenario: Change Till Service_Exception_Till Status Invalid
+  Given I login to Fintech as "org" operator
+  Then I click on "Identity Center" on button in top menu
+  Then I click on left child menu "Till " in org of the "Identity Center" Page
+  Then I select drop down "Query Condition" with option "DropDown.TillqueryCondition"
+  Then I enter text in "Label.Till Number" with value "Till.MpatOrgOne.ClosedTill"
+  Then I click on "Search" button in cite
+  Then I check table "Table.OrgTill" with multiple values as "Till.MpatOrgOne.ClosedTill" and click on "Detail" of "Operation" column
+  Then I Switch tab
+  Then I wait "6"
+  Then I click on the "Product" tab
+  Then I click on "Edit" button in cite
+  Then I wait "6"
+  Then I click on "GenericLocators.ConfirmException"
+  Then I wait "3"
+  Then I switch to previousTab
+  Then I click on "Home" on button in top menu
+  Then I logout the "org" portal and close the browser
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+361    CSTL-3132    Change Till Service_Remove Till Product 
+@TC_FINLSO_ChangeTillService_RemoveTillProduct
+Scenario: Change Till Service_Remove Till Product
+  Given I login to Fintech as "org" operator
+  Then I click on "Identity Center" on button in top menu
+  Then I click on left child menu "Till " in org of the "Identity Center" Page
+  Then I select drop down "Query Condition" with option "DropDown.MSISDN"
+  Then I enter text in "Label.MSISDN" with value "Till.MpatOrgOne.MsisdnNo7"
+  Then I click on "Search" button in cite
+  Then I click on "Search" button in cite
+  Then I check table "Table.OrgTill" with multiple values as "Till.MpatOrgOne.MsisdnNo7" and click on "Detail" of "Operation" column
+  Then I Switch tab
+  Then I wait "6"
+  Then I click on the "Product" tab
+  Then I click on "Edit" button in cite
+  Then I check table "Table.ProductAdd" with multiple values as "Product Name|Super Agent Till" and click on "Delete" of "Operation" column
+  Then I wait "5"
+  Then I click on "GenericLocators.ConfirmButton"
+  Then I enter text area "Remark" with value "Test"
+  Then I click on "Submit" button in cite
+  When static text "Product edited successfully" is visible
+  Then I scroll "GenericLocators.LanguageEdit" to view using "true" parameter
+  Then I click on the "Audit Log" tab
+  Then I select drop down "Category" with option "Identity Management"
+  Then I select drop down "Event Group" with option "DropDown.Till"
+  Then I select drop down "GenericLocators.TillEvent" with the "DropDown.Change Till Product"
+  Then I click on "Search" button in cite
+  Then I check table "Table.OrgAuditLog" with multiple values as "GenericLocators.TillEvent|DropDown.Change Till Product" and click on "Detail" of "Operation" column
+  Then I wait "6"
+  Then I click on "GenericLocators.Closebutton"
+  Then I switch to previousTab
+  Then I click on "Home" on button in top menu
+  Then I logout the "org" portal and close the browser
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+  
+362    CSTL-3131    Change Till Service_Add Till Product
+
+
+
